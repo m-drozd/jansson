@@ -2,9 +2,7 @@
    the hash function.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <jansson_private_config.h>
-#endif
+#include "jansson_private_config.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -141,27 +139,13 @@ static int seed_from_windows_cryptoapi(uint32_t *seed)
 }
 #endif
 
-/* gettimeofday() and getpid() */
+
+extern uint32_t xTaskGetTickCount(void);
 static int seed_from_timestamp_and_pid(uint32_t *seed) {
-#ifdef HAVE_GETTIMEOFDAY
-    /* XOR of seconds and microseconds */
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    *seed = (uint32_t)tv.tv_sec ^ (uint32_t)tv.tv_usec;
-#else
-    /* Seconds only */
-    *seed = (uint32_t)time(NULL);
-#endif
-
-    /* XOR with PID for more randomness */
-#if defined(_WIN32)
-    *seed ^= (uint32_t)GetCurrentProcessId();
-#elif defined(HAVE_GETPID)
-    *seed ^= (uint32_t)getpid();
-#endif
-
+    *seed = (uint32_t)xTaskGetTickCount();
     return 0;
 }
+
 
 static uint32_t generate_seed() {
     uint32_t seed;

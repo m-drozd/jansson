@@ -1005,33 +1005,6 @@ json_t *json_loadb(const char *buffer, size_t buflen, size_t flags, json_error_t
     return result;
 }
 
-json_t *json_loadf(FILE *input, size_t flags, json_error_t *error)
-{
-    lex_t lex;
-    const char *source;
-    json_t *result;
-
-    if(input == stdin)
-        source = "<stdin>";
-    else
-        source = "<stream>";
-
-    jsonp_error_init(error, source);
-
-    if (input == NULL) {
-        error_set(error, NULL, json_error_invalid_argument, "wrong arguments");
-        return NULL;
-    }
-
-    if(lex_init(&lex, (get_func)fgetc, flags, input))
-        return NULL;
-
-    result = parse_json(&lex, flags, error);
-
-    lex_close(&lex);
-    return result;
-}
-
 static int fd_get_func(int *fd)
 {
     uint8_t c;
@@ -1071,31 +1044,6 @@ json_t *json_loadfd(int input, size_t flags, json_error_t *error)
     return result;
 }
 
-json_t *json_load_file(const char *path, size_t flags, json_error_t *error)
-{
-    json_t *result;
-    FILE *fp;
-
-    jsonp_error_init(error, path);
-
-    if (path == NULL) {
-        error_set(error, NULL, json_error_invalid_argument, "wrong arguments");
-        return NULL;
-    }
-
-    fp = fopen(path, "rb");
-    if(!fp)
-    {
-        error_set(error, NULL, json_error_cannot_open_file, "unable to open %s: %s",
-                  path, strerror(errno));
-        return NULL;
-    }
-
-    result = json_loadf(fp, flags, error);
-
-    fclose(fp);
-    return result;
-}
 
 #define MAX_BUF_LEN 1024
 

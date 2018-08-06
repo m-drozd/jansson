@@ -324,9 +324,7 @@ typedef size_t (*json_load_callback_t)(void *buffer, size_t buflen, void *data);
 
 json_t *json_loads(const char *input, size_t flags, json_error_t *error) JANSSON_ATTRS(warn_unused_result);
 json_t *json_loadb(const char *buffer, size_t buflen, size_t flags, json_error_t *error) JANSSON_ATTRS(warn_unused_result);
-json_t *json_loadf(FILE *input, size_t flags, json_error_t *error) JANSSON_ATTRS(warn_unused_result);
 json_t *json_loadfd(int input, size_t flags, json_error_t *error) JANSSON_ATTRS(warn_unused_result);
-json_t *json_load_file(const char *path, size_t flags, json_error_t *error) JANSSON_ATTRS(warn_unused_result);
 json_t *json_load_callback(json_load_callback_t callback, void *data, size_t flags, json_error_t *error) JANSSON_ATTRS(warn_unused_result);
 
 
@@ -347,9 +345,7 @@ typedef int (*json_dump_callback_t)(const char *buffer, size_t size, void *data)
 
 char *json_dumps(const json_t *json, size_t flags) JANSSON_ATTRS(warn_unused_result);
 size_t json_dumpb(const json_t *json, char *buffer, size_t size, size_t flags);
-int json_dumpf(const json_t *json, FILE *output, size_t flags);
 int json_dumpfd(const json_t *json, int output, size_t flags);
-int json_dump_file(const json_t *json, const char *path, size_t flags);
 int json_dump_callback(const json_t *json, json_dump_callback_t callback, void *data, size_t flags);
 
 /* custom memory allocation */
